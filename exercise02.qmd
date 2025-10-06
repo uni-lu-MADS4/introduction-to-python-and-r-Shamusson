@@ -63,6 +63,8 @@ Explain in your words!
 
 ::: unilur-solution
 Python parses four expressions, 1 < x and x < 10 and 10 < x + 3 and x + 3 <= 13 [ ] True or [ ] False 
+
+False for x = 7, since Python evaluates each one separately and then compares the Boolean results.
 :::
 
 
@@ -85,7 +87,10 @@ Consider `is.na()` to identify indeces of missing positions.
  * How large is error that you make when ignore missing values?
 
 ```{r}
-# Write answer here
+ages <- c(18, 20, 34, 53, 12, NA, NA, 72, 75, 13)
+mean(replace(ages, is.na(ages), 0))
+mean(na.omit(ages))
+mean(na.omit(ages)) - mean(replace(ages, is.na(ages), 0))
 ```
 
 ### Create a data frame
@@ -98,7 +103,13 @@ Paul  | 16  | 57.0 |green  |   1
  John  |17   |65.3 | blue    | 2
 
 ```{r}
-# Write answer here
+name <- c("Paul","Mary","Sara","John")
+age <- c(16,16,16,17)
+weight <- c(57.0,50.0,52.6,65.3)
+eye <- c("green","blue","black","tan")
+group <- c(1,1,2,2)
+classroom <- data.frame(name,age,weight,eye,group)
+print(classroom)
 ```
 
 Assign the data frame to a variable named `classroom`.
@@ -108,7 +119,18 @@ Describe the type of variables in `classroom`.
 Which data structure would you use in base Python?
 
 ```{python}
-# Write answer here
+import pandas as pd
+
+data = {
+  "name": ["Paul","Mary","Sara","John"]
+  "age": [16,16,16,17]
+  "weight": [57.0,50.0,52.6,65.3]
+  "eye": ["green","blue","black","tan"]
+  "group": [1,1,2,2]
+}
+
+classroom = pd.DataFrame(data)
+print(classroom)
 ```
 
 
@@ -197,13 +219,18 @@ Using `mtcars` (R) and the provided dictionary (Python):
 - In R, calculate the average `mpg` for cars with `cyl == 6` using **vectorized** operations.
    
 ```{r}
-# Write answer here
+str(mtcars)
+mean(mtcars$mpg[mtcars$cyl==6])
 ```
 
 - In base Python, calculate the same quantity.
 
 ```{python}
-# Write answer here
+mpg = np.array(mtcars["mpg"])
+cyl = np.array(mtcars["cyl"])
+
+avg_mpg = mpg[cyl == 6].mean()
+print(avg_mpg)
 ```
 
 
@@ -212,13 +239,18 @@ Using `mtcars` (R) and the provided dictionary (Python):
 - In R, count the number of cars where `mpg > 20` and `hp <= 100` using vectorized logical operations.
 
 ```{r}
-# Write answer here
+sum(mtcars$mpg>20 & mtcars$hp<=100)
 ```
 
 - In Python, perform the same operation.
 
 ```{python}
-# Write answer here
+mpg = np.array(mtcars["mpg"])
+hp = np.array(mtcars["hp"])
+
+condition = (mpg > 20) & (hp <= 100)
+sum_cars = np.sum(condition)
+print(sum_cars)
 ```
 
 
@@ -229,14 +261,18 @@ Using `mtcars` (R) and the provided dictionary (Python):
 - In R, check the type of `mtcars$mpg` and coerce it to integer.
 
 ```{r}
-# Write answer here
+typeof(mtcars$mpg)
+as.integer(round(mtcars$mpg))
+typeof(as.integer(round(mtcars$mpg)))
 ```
 
 - In Python, check the type of `mtcars['mpg']` and coerce it to a list of integers.
 
  
 ```{python}
-# Write answer here
+type(mtcars["mpg"])
+mtlist = np.array(mtcars["mpg"]).astype(int).tolist()
+print(mtlist)
 ```
 
 
@@ -244,13 +280,22 @@ Using `mtcars` (R) and the provided dictionary (Python):
 - In R, subset `mtcars` to select rows where `gear == 4` and columns `mpg`, and `hp`.
 
 ```{r}
-# Write answer here
+idx = mtcars$gear==4
+mtcars[idx,c("mpg","hp")]
 ```
 
 - In Python, perform the same operation using explicit iteration.
 
 ```{python}
-# Write answer here
+subset = []
+for i in range(len(mtcars["gear"])):
+    if mtcars["gear"][i] == 4:
+        subset.append({
+            "mpg": mtcars["mpg"][i],
+            "hp":  mtcars["hp"][i]
+        })
+        
+print(subset)
 ```
 
 
@@ -261,12 +306,25 @@ Using `mtcars` (R) and the provided dictionary (Python):
 - In R, load the `tidyverse` package and use `dplyr::filter()` to select cars with `am == 1` (manual transmission).
 
 ```{r}
-# Write answer here
+library(tidyverse)
+
+manual_cars <- mtcars |> 
+  filter(am == 1)
+
+manual_cars
 ```
 
 - In Python, import the `statistics` module and calculate the mean `mpg` for cars with `am == 1`.
 ```{python}
-# Write answer here
+import statistics as stat
+
+mpg_am1 = []
+for i in range(len(mtcars["am"])):
+    if mtcars["am"][i] == 1:
+        mpg_am1.append(mtcars["mpg"][i])
+
+mean = stat.mean(mpg_am1)
+print(mean)
 ```
 
 
